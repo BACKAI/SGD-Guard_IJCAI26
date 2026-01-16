@@ -27,7 +27,7 @@ from torchvision import transforms
 from torchvision.transforms.functional import to_pil_image
 
 
-parser = argparse.ArgumentParser(description='Fast Smart InstantPure Attack with DA-EOT & Diff-JPEG')
+parser = argparse.ArgumentParser(description='Fast Smart Attack with DA-EOT & Diff-JPEG')
 
 parser.add_argument('--t', default=4, type=int, help='LCM Inference Steps')
 parser.add_argument('--alpha', default=2, type=float, help='Step size')
@@ -143,7 +143,7 @@ def jpeg_forward_only(x_01: torch.Tensor, q: int) -> torch.Tensor:
 
 
 
-class InstantPure_Purifier(torch.nn.Module):
+class Diffusion_Purifier(torch.nn.Module):
     def __init__(self, model_id, lora_path, device, steps=4):
         super().__init__()
         self.device = device
@@ -183,8 +183,8 @@ class InstantPure_Purifier(torch.nn.Module):
 
 
 
-def load_instantpure_model(lora_path, device, steps):
-    purifier = InstantPure_Purifier(
+def load_diffusion_model(lora_path, device, steps):
+    purifier = Diffusion_Purifier(
         model_id="runwayml/stable-diffusion-v1-5", lora_path=lora_path, device=device, steps=steps
     )
     return purifier
@@ -282,7 +282,7 @@ def run():
 
     print("Loading Models...")
     arcface = torch.load(opt.arcface_path, map_location=device).eval().to(device)
-    purifier = load_instantpure_model(opt.lora_path, device, opt.t)
+    purifier = load_diffusion_model(opt.lora_path, device, opt.t)
 
     clip_model, _ = clip.load("ViT-B/16", device=device)
     try: clip_model.load_state_dict(torch.load(opt.farl_path, map_location=device)['state_dict'], strict=False)
@@ -311,7 +311,7 @@ def run():
     ds = torchvision.datasets.ImageFolder(opt.data_path, transform=tf)
     pgd = gen_pgd_confs(eps=opt.epsilon, alpha=opt.alpha, iter=opt.iter, input_range=(0,1))
     
-    print(f"Start Fast Smart InstantPure Attack (with DA-EOT={opt.lambda_da}, JPEG={opt.lambda_jpeg})...")
+    print(f"Start Fast Smart Attack (with DA-EOT={opt.lambda_da}, JPEG={opt.lambda_jpeg})...")
     for i in tqdm(range(len(ds))):
         x, _ = ds[i]
         x = x.unsqueeze(0).to(device)
