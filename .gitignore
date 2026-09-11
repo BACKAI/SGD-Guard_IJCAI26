@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+pretrained/
+outputs/
+*.h5
+*.npy
+*.npz
+*.pt
+*.pth
+*.safetensors
+

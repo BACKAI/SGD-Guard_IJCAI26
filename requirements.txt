@@ -1,0 +1,16 @@
+torch>=2.2
+torchvision>=0.17
+numpy>=1.24
+Pillow>=10.0
+h5py>=3.9
+tqdm>=4.65
+diffusers>=0.31
+transformers>=4.40
+accelerate>=0.28
+peft>=0.13
+safetensors>=0.4
+facenet-pytorch>=2.6
+ftfy>=6.1
+regex>=2023.0
+git+https://github.com/openai/CLIP.git
+
