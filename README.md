@@ -7,11 +7,9 @@ This directory is an independent, runnable implementation of:
 **Publication status:** the paper is **accepted to IJCAI 2026**. The official proceedings version is forthcoming.
 
 
-## Overview
+## Abstract
 
-SGD-Guard is an image-level proactive face-swapping defense. It adds a small pixel perturbation to a face image so that identity-critical facial attributes are disrupted in downstream face-swapping models while maintaining visual quality. The perturbation is optimized to remain effective under diffusion purification, JPEG compression, and geometric or photometric transformations.
-
-The implementation follows Sections 3.1--3.6 and Algorithms 1--2 of the paper and includes the CI-JES semantic distortion attack, semantic-direction EOT, semantic-robust JPEG, SIIR generalized identity gallery, and diffusion-guided optimization.
+The rapid progress of identity-feature-based face-swapping technology has raised concerns about impersonation and privacy violations. Although proactive defenses aim to block identity extraction at the source, existing methods suffer from perceptible visual artifacts, poor generalization across diverse deepfake models, and vulnerability to post-processing techniques (e.g., diffusion purification, image compression, and transformations). This work proposes a robust, generalizable proactive face-swapping defense via semantic gradient divergence (SGD-Guard) to address these challenges. It introduces an integrated feature gallery that uses CLIP features and a generalized identity feature, obtained by iteratively refining heterogeneous identity features into a homogeneous representation. This framework facilitates our semantic distortion attack by leveraging consensus weighting to target specific facial attributes within a CLIP-identity joint embedding space, disrupting deepfake generation while preserving visual fidelity. Furthermore, to ensure robustness against purification and post-processing, this method incorporates a module that prioritizes critical transformations by exploiting directional discrepancies. Comprehensive experiments demonstrate that the method effectively defends against diverse face-swapping models with high cross-model transferability.
 
 
 
@@ -252,6 +250,8 @@ The output directory mirrors the input tree and stores protected PNG files toget
 The default normalized perturbation budget is `epsilon=3/255`, and the PGD step size is `2/255`. These values are expressed in `[0,1]` image units. The final image is returned as `clip(x + delta, 0, 1)`, as in Algorithm 2.
 
 
+
+<!--
 ## Ablations and debugging
 
 ```bash
@@ -269,7 +269,7 @@ python protect.py ... --disable-purifier --disable-sr-jpeg
 
 `--projection-ckpt` optionally loads separate 512-to-256-to-256 directional projection heads. The paper describes these lightweight heads but does not release a projection checkpoint; the default therefore uses the shared-space identity map for the already 512-D features.
 
-<!--
+
 ## Evaluation
 
 The included evaluator computes source-image PSNR and SSIM for matching original and protected pairs:
